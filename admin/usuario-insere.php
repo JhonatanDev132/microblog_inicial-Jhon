@@ -1,5 +1,20 @@
 <?php 
 require_once "../inc/cabecalho-admin.php";
+use Microblog\Usuario;
+if(isset($_POST['inserir'])){
+    $usuario = new Usuario;
+    $usuario->setNome($_POST['nome']);
+    $usuario->setEmail($_POST['email']);
+    $usuario->setTipo($_POST['tipo']);
+	$usuario->setSenha($usuario->password_verify($_POST["senha"]));
+
+	$usuario->getNome();
+	$usuario->getEmail();
+	$usuario->getSenha();
+	$usuario->getTipo();
+
+	var_dump($usuario);
+}
 ?>
 
 
