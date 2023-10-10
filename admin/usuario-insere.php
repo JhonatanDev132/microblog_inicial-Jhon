@@ -8,12 +8,8 @@ if(isset($_POST['inserir'])){
     $usuario->setTipo($_POST['tipo']);
 	$usuario->setSenha($usuario->password_verify($_POST["senha"]));
 
-	$usuario->getNome();
-	$usuario->getEmail();
-	$usuario->getSenha();
-	$usuario->getTipo();
-
-	var_dump($usuario);
+	$usuario->inserir();
+	header("location:usuarios.php");
 }
 ?>
 
