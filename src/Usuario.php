@@ -1,6 +1,8 @@
 <?php
 namespace Microblog;
 use PDO, Exception;
+
+
 class Usuario{
     private int $id;
     private string $nome;
@@ -64,10 +66,48 @@ class Usuario{
         return $resultado;
     } 
 
+    public function Atualizar() : void {
+        $sql = "UPDATE usuarios SET nome = :nome, email = :email, senha = :senha, tipo = :tipo WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $this->id, PDO::PARAM_INT);
+            $consulta->bindValue(":nome", $this->nome, PDO::PARAM_STR);
+            $consulta->bindValue(":email", $this->email, PDO::PARAM_STR);
+            $consulta->bindValue(":senha", $this->senha, PDO::PARAM_STR);
+            $consulta->bindValue(":tipo", $this->tipo, PDO::PARAM_STR);
+            $consulta->execute();
+        } catch (Exception $erro) {
+            die("Erro ao atualizar usuaário: ".$erro->getMessage());
+        }
+    }
+    // --------------------------------
+    public function excluirUsuario() : void {
+        $sql = "DELETE FROM usuarios WHERE id = :id";
+
+        try{
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $this->id, PDO::PARAM_INT);
+            $consulta->execute();
+        } catch (Exception $erro) {
+            die("Erro ao excluir: ".$erro->getMessage());
+        }
+    }
     // --------------------------------
     /* Método para codificação e comparação de senha */
-    public function password_verify(string $senha):string {
+    public function codificaSenha(string $senha):string {
         return password_hash($senha, PASSWORD_DEFAULT);
+    }
+
+    // --------------------------------
+    public function verificaSenha(string $senhaDoFormulario, string $senhaBanco) : string {
+        if(password_verify($senhaDoFormulario, $senhaBanco)){
+            /* Se for igual mantém a mesma senha */
+            return $senhaBanco;
+        } else {
+            /* Se forem Diferentes, então a nova senha (ou seja, a que foi difitada no formulário) DEVE ser codificada */
+            return $this->codificaSenha($senhaDoFormulario);
+        }
     }
     // --------------------------------
     

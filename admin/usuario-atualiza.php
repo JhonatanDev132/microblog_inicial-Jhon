@@ -5,7 +5,28 @@ $usuario = new Usuario;
 $usuario->setId($_GET['id']);
 $dadosUsuario = $usuario->lerUm();
 
+if(isset($_POST["atualizar"])){
+	$usuario->setNome($_POST["nome"]);
+	$usuario->setEmail($_POST["email"]);
+	$usuario->setTipo($_POST["tipo"]);
+	
+	
+	/* Algoritmo geral para tratamento de senha */
 
+	/* Se o campo senha do formulário estiver vazio,
+	significa que o usuário NÃO mudou senha. */
+	if(empty($_POST['senha'])){
+		/* Repassando a senha que ja existe no banco no caso do usuário não mudar a senha */
+		$usuario->setSenha($dadosUsuario['senha']);
+	}
+	else{
+		/* Caso contrário se o usuário digitou algo no campo, precisaremos verificar o que foi digitado. */
+		$usuario->setSenha($usuario->verificaSenha($_POST['senha'], $dadosUsuario['senha']));
+	}
+
+	$usuario->Atualizar();
+	header("location:usuarios.php");
+}
 ?>
 
 
