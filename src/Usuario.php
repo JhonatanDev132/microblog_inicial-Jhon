@@ -92,7 +92,7 @@ class Usuario{
         } catch (Exception $erro) {
             die("Erro ao excluir: ".$erro->getMessage());
         }
-    }
+    }   
     // --------------------------------
     /* Método para codificação e comparação de senha */
     public function codificaSenha(string $senha):string {
